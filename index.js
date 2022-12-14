@@ -6,8 +6,7 @@ const {
   GatewayIntentBits,
   Partials,
 } = require("discord.js");
-require("dotenv").config();
-const supabaseClient = require("../supabase.js").client;
+require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
 const client = new Client({
   intents: [
