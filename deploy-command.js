@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("node:path");
 const { REST, SlashCommandBuilder, Routes } = require("discord.js");
-require("dotenv").config();
+require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
 const commands = [];
 const commandsPath = path.join(__dirname, "commands");
@@ -18,10 +18,10 @@ commandFiles.forEach((file) => {
 const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN);
 
 // delete all global application commands
-// rest
-//   .put(Routes.applicationCommands(process.env.CLIENT_ID), { body: [] })
-//   .then(() => console.log("Successfully deleted all application commands."))
-//   .catch(console.error);
+rest
+  .put(Routes.applicationCommands(process.env.CLIENT_ID), { body: [] })
+  .then(() => console.log("Successfully deleted all application commands."))
+  .catch(console.error);
 
 // create global application commands
 rest
