@@ -6,7 +6,8 @@ const {
   GatewayIntentBits,
   Partials,
 } = require("discord.js");
-require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
+const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : ".env";
+require("dotenv").config({ path: path.join(__dirname, "..", envFile) });
 
 const client = new Client({
   intents: [
