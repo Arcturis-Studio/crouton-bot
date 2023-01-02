@@ -1,5 +1,5 @@
 import { Client, Routes, SlashCommandBuilder } from "discord.js";
-// import { REST } from "@discordjs/rest";
+import { REST } from "@discordjs/rest";
 import { readdirSync } from "fs";
 import { join } from "path";
 import { color } from "../functions";
@@ -17,24 +17,24 @@ module.exports = (client: Client) => {
     client.slashCommands.set(command.command.name, command);
   });
 
-  //   const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN);
+  const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN);
 
-  //   rest
-  //     .put(Routes.applicationCommands(process.env.CLIENT_ID), {
-  //       body: slashCommands.map((command) => command.toJSON()),
-  //     })
-  //     .then((data: any) => {
-  //       console.log(
-  //         color(
-  //           "text",
-  //           `🔥 Successfully loaded ${color(
-  //             "variable",
-  //             data.length
-  //           )} slash command(s)`
-  //         )
-  //       );
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //     });
+  rest
+    .put(Routes.applicationCommands(process.env.CLIENT_ID), {
+      body: slashCommands.map((command) => command.toJSON()),
+    })
+    .then((data: any) => {
+      console.log(
+        color(
+          "text",
+          `🔥 Successfully loaded ${color(
+            "variable",
+            data.length
+          )} slash command(s)`
+        )
+      );
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };

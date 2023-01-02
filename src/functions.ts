@@ -1,13 +1,14 @@
 import chalk from "chalk";
 import {
-  Guild,
   GuildMember,
   PermissionFlagsBits,
   PermissionResolvable,
-  PermissionsBitField,
   TextChannel,
 } from "discord.js";
-import { GuildOption } from "./types";
+import { EmojiLib } from "./types";
+
+const emojiLib = require("emojilib");
+const emojiData: EmojiLib = require("unicode-emoji-json");
 
 type ColorType = "text" | "variable" | "error";
 
@@ -57,4 +58,18 @@ export const sendTimedMessage = (
       )
     );
   return;
+};
+
+for (const emoji in emojiData) {
+  emojiData[emoji]["keywords"] = emojiLib[emoji] ? emojiLib[emoji] : [];
+}
+
+export const getUnicodeByEmojiName = (emojiName: string) => {
+  for (const emoji in emojiData) {
+    if (
+      emojiData[emoji].keywords.find((keyword) => keyword == emojiName) ==
+      emojiName
+    )
+      return emoji;
+  }
 };

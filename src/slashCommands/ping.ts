@@ -1,9 +1,4 @@
-import {
-  SlashCommandBuilder,
-  ChannelType,
-  TextChannel,
-  EmbedBuilder,
-} from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import { SlashCommand } from "../types";
 
 const command: SlashCommand = {
