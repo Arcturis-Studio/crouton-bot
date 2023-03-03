@@ -5,7 +5,8 @@
 	"description": "",
 	"main": "build/index.js",
 	"scripts": {
-		"build": "tsc --build && NODE_ENV=production",
+		"start": "tsc --build && node .",
+		"build": "tsc --build",
 		"dev": "tsc --build && NODE_ENV=dev node ."
 	},
 	"keywords": [],
