@@ -1,13 +1,19 @@
-FROM node:19.2 as base
+FROM node:19.2
 
-WORKDIR /bot
+ENV USER=croutonbot
 
-COPY . .
+# create croutonbot user
+RUN groupadd -r ${USER} && \
+	useradd --create-home --home /home/croutonbot -r -g ${USER} ${USER}
 
-RUN npm ci
+# set up volume and user
+USER ${USER}
+WORKDIR /home/croutonbot
 
-FROM base as production
+COPY --chown=${USER}:${USER} package*.json ./
+RUN npm install
+VOLUME [ "/home/croutonbot" ]
 
-ENV NODE_PATH=./build
+COPY --chown=${USER}:${USER}  . .
 
-RUN npm run build
+ENTRYPOINT [ "npm", "run", "start" ]
