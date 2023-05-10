@@ -1,0 +1,19 @@
+services:
+  music:
+    image: yourfavoritekyle/crouton_bot_music
+    container_name: bot-music
+    environment:
+      - TOKEN=${BOT_TOKEN}
+  standard:
+    build:
+      context: .
+      dockerfile: standard.Dockerfile
+      target: base
+    image: yourfavoritekyle/crouton_bot_standard
+    container_name: bot-standard
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - CLIENT_ID=${CLIENT_ID}
+    volumes:
+      - ./src:/home/node/bot/src
+    command: npm run start

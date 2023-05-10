@@ -7,7 +7,7 @@
 	"scripts": {
 		"start": "tsc --build && node .",
 		"build": "tsc --build",
-		"dev": "tsc --build && NODE_ENV=dev node ."
+		"dev": "tsc --build && NODE_ENV=local node ."
 	},
 	"keywords": [],
 	"author": "",
@@ -15,9 +15,14 @@
 	"dependencies": {
 		"@supabase/supabase-js": "^2.1.3",
 		"chalk": "^4.1.2",
-		"dotenv": "^16.0.3"
+		"discord.js": "^14.7.1",
+		"dotenv": "^16.0.3",
+		"emojilib": "^3.0.8",
+		"unicode-emoji-json": "^0.4.0"
 	},
 	"devDependencies": {
+		"@types/node": "^18.11.18",
+		"ts-node": "^10.9.1",
 		"typescript": "^4.9.4"
 	}
 }
