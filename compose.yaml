@@ -13,7 +13,7 @@ services:
   standard:
     build:
       context: .
-      dockerfile: standard.Dockerfile
+      dockerfile: Dockerfile
     image: yourfavoritekyle/crouton_bot_standard
     container_name: bot-standard
     environment:
