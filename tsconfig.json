@@ -100,6 +100,6 @@
 		// "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
 		"skipLibCheck": true /* Skip type checking all .d.ts files. */
 	},
-	"include": ["./", "commands/ping.ts", "commands/ping.ts"],
+	"include": ["./"],
 	"exclude": ["./build", "./node_modules", "./registerCommands"]
 }
