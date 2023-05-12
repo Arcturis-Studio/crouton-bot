@@ -1,7 +1,10 @@
-version: '3.5'
+version: '3.8'
 
 volumes:
-  crouton_data:
+  evobot:
+  croutonbot:
+  registercommands:
+
 services:
   music:
     image: yourfavoritekyle/crouton_bot_music
@@ -9,7 +12,14 @@ services:
     environment:
       - TOKEN=${BOT_TOKEN}
     volumes:
-      - crouton_data:/home
+      - evobot:/home/evobot
+    healthcheck:
+      test: ['CMD-SHELL', 'test -f /home/evobot/dist/index.js']
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   standard:
     build:
       context: .
@@ -18,7 +28,29 @@ services:
     container_name: bot-standard
     environment:
       - BOT_TOKEN=${BOT_TOKEN}
+    volumes:
+      - croutonbot:/home/croutonbot
+
+    healthcheck:
+      test: ['CMD-SHELL', 'test -f /home/croutonbot/build/index.js']
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  register-commands:
+    image: yourfavoritekyle/crouton_bot_register_commands
+    container_name: bot-register-commands
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
       - CLIENT_ID=${CLIENT_ID}
     volumes:
-      - crouton_data:/home
-    command: npm run start
+      - registercommands:/home/registercommands
+      - croutonbot:/home/croutonbot
+      - evobot:/home/evobot
+    restart: on-failure
+    depends_on:
+      music:
+        condition: service_healthy
+      standard:
+        condition: service_healthy
