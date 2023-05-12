@@ -13,6 +13,7 @@ services:
       - TOKEN=${BOT_TOKEN}
     volumes:
       - evobot:/home/evobot
+    restart: always
     healthcheck:
       test: ['CMD-SHELL', 'test -f /home/evobot/dist/index.js']
       start_period: 5s
@@ -30,6 +31,7 @@ services:
       - BOT_TOKEN=${BOT_TOKEN}
     volumes:
       - croutonbot:/home/croutonbot
+    restart: always
 
     healthcheck:
       test: ['CMD-SHELL', 'test -f /home/croutonbot/build/index.js']
