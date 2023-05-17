@@ -1,24 +1,18 @@
 {
-	"name": "@ewok-translator/bot",
+	"name": "registercommands",
 	"version": "1.0.0",
-	"private": true,
 	"description": "",
 	"main": "build/index.js",
 	"scripts": {
-		"start": "tsc --build && node .",
+		"start": "tsc --build && node ./build/index.js",
 		"build": "tsc --build",
 		"dev": "tsc --build && NODE_ENV=local node ."
 	},
-	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@supabase/supabase-js": "^2.1.3",
-		"chalk": "^4.1.2",
 		"discord.js": "^14.7.1",
-		"dotenv": "^16.0.3",
-		"emojilib": "^3.0.8",
-		"unicode-emoji-json": "^0.4.0"
+		"dotenv": "^16.0.3"
 	},
 	"devDependencies": {
 		"@types/node": "^18.11.18",
