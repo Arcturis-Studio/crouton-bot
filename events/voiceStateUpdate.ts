@@ -1,4 +1,4 @@
-import { VoiceState } from 'discord.js';
+import { PermissionsBitField, VoiceState } from 'discord.js';
 import { BotEvent } from '../types';
 import { supabase } from '../supabase';
 
@@ -28,7 +28,11 @@ const event: BotEvent = {
 		const currentChannel = data.find((x) => x.voice_channel_id === newMember.channelId);
 		const oldChannel = data.find((x) => x.voice_channel_id === oldMember.channelId);
 
-		if (!(await newMember.guild.members.fetchMe()).permissions.has('ManageNicknames')) {
+		if (
+			!(await newMember.guild.members.fetchMe()).permissions.has(
+				PermissionsBitField.Flags.ManageNicknames
+			)
+		) {
 			await (
 				await member.guild.fetchOwner()
 			).send(

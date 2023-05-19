@@ -5,7 +5,8 @@ import {
 	ChatInputCommandInteraction,
 	ActionRowBuilder,
 	StringSelectMenuBuilder,
-	ComponentType
+	ComponentType,
+	PermissionsBitField
 } from 'discord.js';
 import { SlashCommand } from '../types';
 import { supabase } from '../supabase';
@@ -41,6 +42,24 @@ const command: SlashCommand = {
 		),
 	execute: async (interaction) => {
 		await interaction.deferReply({ ephemeral: true });
+
+		if (
+			!(await interaction.guild?.members.fetchMe())?.permissions.has(
+				PermissionsBitField.Flags.ManageNicknames
+			)
+		) {
+			await (
+				await interaction.guild?.fetchOwner()
+			)?.send(
+				`I do not have permissions to manage nicknames in ${interaction.guild?.name}! Please try inviting me again to refresh permissions.`
+			);
+
+			await interaction.editReply(
+				`I do not have permissions to manage nicknames in here! I've already sent a DM to the server owner!\nSit tight! The oven is hot!`
+			);
+			await timeoutDelete(interaction);
+			return;
+		}
 
 		if (interaction.user.id === interaction.guild?.ownerId) {
 			await interaction.editReply(
@@ -85,6 +104,7 @@ const command: SlashCommand = {
 
 			if (!data) {
 				await interaction.editReply('There was not anything in the bakery. You are good to go!');
+				await timeoutDelete(interaction);
 				return;
 			}
 
