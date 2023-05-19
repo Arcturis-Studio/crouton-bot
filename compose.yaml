@@ -29,6 +29,8 @@ services:
     container_name: bot-standard
     environment:
       - BOT_TOKEN=${BOT_TOKEN}
+      - PUBLIC_SUPABASE_URL=${PUBLIC_SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
     volumes:
       - croutonbot:/home/croutonbot
     restart: always
@@ -46,6 +48,8 @@ services:
     environment:
       - BOT_TOKEN=${BOT_TOKEN}
       - CLIENT_ID=${CLIENT_ID}
+      - PUBLIC_SUPABASE_URL=${PUBLIC_SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
     volumes:
       - registercommands:/home/registercommands
       - croutonbot:/home/croutonbot
