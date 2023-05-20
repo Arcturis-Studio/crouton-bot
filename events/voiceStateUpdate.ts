@@ -12,6 +12,14 @@ const event: BotEvent = {
 		// We can't change guild owners nicknames...
 		if (member.id === member.guild.ownerId) return;
 
+		// Check if the author has a higher role than Crouton. If so, Crouton can't do anything.
+		// This should only trigger if a user previously had a higher role than Crouton and that status has since changed.
+		if (
+			(await member.guild.members.fetchMe()).roles.highest.position < member.roles.highest.position
+		) {
+			return;
+		}
+
 		const { data, error } = await supabase
 			.from('nicknames')
 			.select()

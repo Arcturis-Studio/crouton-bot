@@ -43,11 +43,10 @@ const command: SlashCommand = {
 	execute: async (interaction) => {
 		await interaction.deferReply({ ephemeral: true });
 
-		if (
-			!(await interaction.guild?.members.fetchMe())?.permissions.has(
-				PermissionsBitField.Flags.ManageNicknames
-			)
-		) {
+		const me = await interaction.guild?.members.fetchMe();
+		const author = await interaction.guild?.members.fetch(interaction.user.id);
+
+		if (!me?.permissions.has(PermissionsBitField.Flags.ManageNicknames)) {
 			await (
 				await interaction.guild?.fetchOwner()
 			)?.send(
@@ -63,8 +62,17 @@ const command: SlashCommand = {
 
 		if (interaction.user.id === interaction.guild?.ownerId) {
 			await interaction.editReply(
-				`Unfortunately, bots do not have the ability to change server owner nicknames.`
+				`Unfortunately, bots do not have the ability to change server owner nicknames. My bread does not compare...`
 			);
+			return;
+		}
+
+		// Check if the author has a higher role than Crouton. If so, Crouton can't do anything.
+		if (author && me.roles.highest.position < author.roles.highest.position) {
+			await interaction.editReply(
+				`You have a higher role than me. My bread is not powerful enough to change your nickname...`
+			);
+			await timeoutDelete(interaction);
 			return;
 		}
 
@@ -141,7 +149,10 @@ const command: SlashCommand = {
 				]
 			});
 			response
-				.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 60000 })
+				.createMessageComponentCollector({
+					componentType: ComponentType.StringSelect,
+					time: 60000
+				})
 				.on('collect', async (collectorInteraction) => {
 					const selections = validChannels.filter((x) => {
 						return collectorInteraction.values.some((v) => {
