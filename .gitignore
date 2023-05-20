@@ -1,0 +1,10 @@
+node_modules
+*.env*
+!.env.example
+build
+.DS_STORE
+DS_STORE
+config.json
+*.code_workspace
+supabase/.branches
+supabase/.temp

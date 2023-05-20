@@ -5,7 +5,7 @@ import { SlashCommand } from './types';
 import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 
 const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
-config({ path: join(__dirname, '..', '..', envFile) });
+config({ path: join(__dirname, '..', envFile) });
 
 const client = new Client({
 	intents: [
