@@ -1,5 +1,11 @@
 import chalk from 'chalk';
-import { GuildMember, PermissionFlagsBits, PermissionResolvable, TextChannel } from 'discord.js';
+import {
+	ChatInputCommandInteraction,
+	GuildMember,
+	PermissionFlagsBits,
+	PermissionResolvable,
+	TextChannel
+} from 'discord.js';
 import { EmojiLib } from '../types';
 
 const emojiLib = require('emojilib');
@@ -34,6 +40,19 @@ export const checkPermissions = (member: GuildMember, permissions: Array<Permiss
 				.join(' ');
 	});
 };
+
+export async function timeoutDelete(interaction: ChatInputCommandInteraction) {
+	setTimeout(async () => {
+		await interaction.deleteReply();
+	}, 30000);
+}
+
+export async function generalErrorMessage(interaction: ChatInputCommandInteraction) {
+	await interaction.editReply(
+		'Something went wrong in the bakery. Please try sending your order again.'
+	);
+	await timeoutDelete(interaction);
+}
 
 export const sendTimedMessage = (message: string, channel: TextChannel, duration: number) => {
 	channel

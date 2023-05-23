@@ -10,6 +10,7 @@ import {
 } from 'discord.js';
 import { SlashCommand } from '../types';
 import { supabase } from '../supabase';
+import { generalErrorMessage, timeoutDelete } from '../utils/functions';
 
 const command: SlashCommand = {
 	command: new SlashCommandBuilder()
@@ -255,18 +256,5 @@ const command: SlashCommand = {
 	},
 	cooldown: 10
 };
-
-async function timeoutDelete(interaction: ChatInputCommandInteraction) {
-	setTimeout(async () => {
-		await interaction.deleteReply();
-	}, 30000);
-}
-
-async function generalErrorMessage(interaction: ChatInputCommandInteraction) {
-	await interaction.editReply(
-		'Something went wrong in the bakery. Please try sending your order again.'
-	);
-	await timeoutDelete(interaction);
-}
 
 export default command;
