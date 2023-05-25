@@ -77,33 +77,24 @@ export interface Database {
           voice_channel_id?: string
         }
       }
-      provider_data: {
+      presence: {
         Row: {
-          access_token: string
-          created_at: string
-          expires_at: string
+          activity: string
+          created_at: string | null
           id: string
-          refresh_token: string
-          scopes: string
-          token_type: string
+          type: string
         }
         Insert: {
-          access_token: string
-          created_at?: string
-          expires_at: string
-          id: string
-          refresh_token: string
-          scopes: string
-          token_type: string
+          activity: string
+          created_at?: string | null
+          id?: string
+          type: string
         }
         Update: {
-          access_token?: string
-          created_at?: string
-          expires_at?: string
+          activity?: string
+          created_at?: string | null
           id?: string
-          refresh_token?: string
-          scopes?: string
-          token_type?: string
+          type?: string
         }
       }
       puns: {
@@ -208,6 +199,7 @@ export interface Database {
           owner: string | null
           path_tokens: string[] | null
           updated_at: string | null
+          version: string | null
         }
         Insert: {
           bucket_id?: string | null
@@ -219,6 +211,7 @@ export interface Database {
           owner?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
+          version?: string | null
         }
         Update: {
           bucket_id?: string | null
@@ -230,6 +223,7 @@ export interface Database {
           owner?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
+          version?: string | null
         }
       }
     }
@@ -237,6 +231,15 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      can_insert_object: {
+        Args: {
+          bucketid: string
+          name: string
+          owner: string
+          metadata: Json
+        }
+        Returns: undefined
+      }
       extension: {
         Args: {
           name: string
