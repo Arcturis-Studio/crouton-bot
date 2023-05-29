@@ -43,6 +43,9 @@ class Activities {
 	public setActivity() {
 		const randomActivity =
 			this.activities[Math.floor(Math.random() * (this.activities.length - 1) + 1)];
+		
+		if (this.activities.length === 0) return;
+
 		this.client.user?.setActivity(randomActivity.activity, {
 			type: <Exclude<ActivityType, ActivityType.Custom>>(
 				ActivityType[randomActivity.type as keyof typeof ActivityType]
