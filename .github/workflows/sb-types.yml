@@ -8,13 +8,14 @@ on:
       - "dev"
   workflow_dispatch:
 
-env:
-  CLIENT_ID: ''
-  SECRET: ''
-
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    env:
+      CLIENT_ID: x
+      CLIENT_SECRET: x
+
     steps:
       - uses: actions/checkout@v3
       
