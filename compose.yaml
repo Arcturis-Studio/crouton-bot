@@ -1,0 +1,62 @@
+version: '3.8'
+
+volumes:
+  evobot:
+  croutonbot:
+  registercommands:
+
+services:
+  music:
+    image: yourfavoritekyle/crouton_bot_music
+    container_name: bot-music
+    environment:
+      - TOKEN=${BOT_TOKEN}
+    volumes:
+      - evobot:/home/evobot
+    restart: always
+    healthcheck:
+      test: ['CMD-SHELL', 'test -f /home/evobot/dist/index.js']
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  standard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: yourfavoritekyle/crouton_bot_standard
+    container_name: bot-standard
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - PUBLIC_SUPABASE_URL=${PUBLIC_SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+    volumes:
+      - croutonbot:/home/croutonbot
+    restart: always
+
+    healthcheck:
+      test: ['CMD-SHELL', 'test -f /home/croutonbot/build/index.js']
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  register-commands:
+    image: yourfavoritekyle/crouton_bot_register_commands
+    container_name: bot-register-commands
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - CLIENT_ID=${CLIENT_ID}
+      - PUBLIC_SUPABASE_URL=${PUBLIC_SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+    volumes:
+      - registercommands:/home/registercommands
+      - croutonbot:/home/croutonbot
+      - evobot:/home/evobot
+    restart: on-failure
+    depends_on:
+      music:
+        condition: service_healthy
+      standard:
+        condition: service_healthy
