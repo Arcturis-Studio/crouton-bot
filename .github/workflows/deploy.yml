@@ -23,6 +23,7 @@ jobs:
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }}
           docker compose pull
+          docker compose down -v
           docker compose up -d --force-recreate --wait
           docker system prune -af"
       - name: cleanup ssh
