@@ -7,7 +7,13 @@
 	"scripts": {
 		"start": "tsc --build && node .",
 		"build": "tsc --build",
-		"dev": "tsc --build && NODE_ENV=local node ."
+		"dev": "tsc --build && NODE_ENV=local node .",
+		"register": "tsc --build && NODE_ENV=local node ./registerCommands.js",
+		"docker:builder": "docker buildx create --name builder --driver docker-container --bootstrap",
+		"docker:build": "docker build -t yourfavoritekyle/crouton_bot_standard ./bot",
+		"docker:dev": "docker compose --project-directory ./bot --env-file=.env.local up",
+		"docker:prod": "docker compose --project-directory ./bot --env-file=.env down --rmi all --volumes && docker compose --project-directory ./bot --env-file=.env up -d",
+		"docker:down": "docker compose --project-directory ./bot --env-file=.env down --volumes"
 	},
 	"keywords": [],
 	"author": "",
