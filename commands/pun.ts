@@ -25,13 +25,19 @@ const command: SlashCommand = {
 			return;
 		}
 
-		interaction.editReply(getRandomPun(data).pun);
+		const pun = getRandomPun(data);
+
+		interaction.editReply(
+			pun
+				? pun.pun
+				: "We regret to inform you that our bread puns have all been gobbled up. Please try again when we've baked some fresh ones."
+		);
 	},
 	cooldown: 10
 };
 
-function getRandomPun(puns: Array<Database['public']['Tables']['puns']['Row']>) {
-	const ranNum = Math.round(Math.random() * (puns.length - 0) + 0);
+export function getRandomPun(puns: Array<Database['public']['Tables']['puns']['Row']>) {
+	const ranNum = Math.round(Math.random() * (puns.length - 1) + 0);
 
 	return puns[ranNum];
 }
