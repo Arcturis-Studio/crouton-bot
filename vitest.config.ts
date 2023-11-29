@@ -1,5 +1,10 @@
 import { defineConfig } from 'vitest/config';
-import { resolve } from 'path';
+import { resolve, join } from 'path';
+import { config } from 'dotenv';
+
+config({ path: join(__dirname, '.env.local') });
+
+const { TZ, ...envVars } = process.env as Record<string, string>;
 
 export default defineConfig({
 	root: '.',
@@ -9,7 +14,7 @@ export default defineConfig({
 	test: {
 		clearMocks: true,
 		globals: true,
-		setupFiles: ['dotenv/config'],
+		env: envVars,
 		exclude: [
 			'**/node_modules/**',
 			'**/build/**',
@@ -26,6 +31,6 @@ export default defineConfig({
 		}
 	},
 	resolve: {
-		alias: [{ find: '~', replacement: resolve(__dirname, 'src') }]
+		alias: [{ find: '~', replacement: resolve(__dirname) }]
 	}
 });
