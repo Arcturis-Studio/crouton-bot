@@ -15,6 +15,7 @@ export default defineConfig({
 		clearMocks: true,
 		globals: true,
 		env: envVars,
+		include: ['**/*/*.ts'],
 		exclude: [
 			'**/node_modules/**',
 			'**/build/**',
