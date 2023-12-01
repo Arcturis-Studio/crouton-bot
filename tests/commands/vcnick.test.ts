@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, StringSelectMenuBuilder, ActionRowBuilder } from 'discord.js';
 import { describe, expect, it, vi } from 'vitest';
 import command from '../../commands/vcnick';
 import { set, reset } from '../../commands/vcnick';
@@ -109,7 +109,15 @@ describe('reset', () => {
 		},
 		guildId: '1',
 		user: { id: '1' },
-		editReply: vi.fn()
+		editReply: vi.fn().mockImplementation(({ content, components }) => {
+			return {
+				content,
+				components,
+				createMessageComponentCollector: vi.fn().mockReturnValue({
+					on: vi.fn().mockReturnThis()
+				})
+			};
+		})
 	} as unknown as ChatInputCommandInteraction;
 
 	describe('all', () => {
@@ -242,7 +250,11 @@ describe('reset', () => {
 		await reset(interaction);
 
 		expect(interaction.guild.channels.fetch).toHaveBeenCalled();
-		expect(generalErrorMessage).toHaveBeenCalled();
+		expect(interaction.editReply).toHaveBeenCalledWith(
+			'There are no channels here that match your dough recipe!'
+		);
+	});
+
 	});
 
 });

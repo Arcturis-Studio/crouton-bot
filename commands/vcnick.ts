@@ -134,12 +134,12 @@ export async function reset(interaction: ChatInputCommandInteraction) {
 	// but now does not, essentially orphaning the related configurations.
 	// This can also happen when a channel is deleted and renamed to the same name since the association is made
 	// via the channel id.
+	// This can also happen when a channel is no longer visible due to permission changes to either the user or the channel.
 	if (!channels) {
 		await generalErrorMessage(interaction);
 		return;
 	}
 
-	// BUG: No error checking for an empty array here. What if there are no valid channels?
 	// Valid channels are considered channels that exist in the guild and have a nickname configuration for the user
 	const validChannels = channels
 		.filter((x) => {
@@ -153,6 +153,12 @@ export async function reset(interaction: ChatInputCommandInteraction) {
 				value: x?.id!
 			};
 		});
+
+	if (!Array.isArray(validChannels) || !validChannels.length) {
+		await interaction.editReply('There are no channels here that match your dough recipe!');
+		await timeoutDelete(interaction);
+		return;
+	}
 
 	const resetSelection = new StringSelectMenuBuilder()
 		.setCustomId('channel')
