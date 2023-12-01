@@ -20,7 +20,7 @@ const command: SlashCommand = {
 		}
 
 		if (!data) {
-			await interaction.editReply('Uh oh... There was nothing in the in the oven!');
+			await interaction.editReply('Uh oh... There was nothing in the oven!');
 			await timeoutDelete(interaction);
 			return;
 		}
