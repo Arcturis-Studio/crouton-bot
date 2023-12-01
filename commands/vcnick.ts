@@ -129,11 +129,18 @@ export async function reset(interaction: ChatInputCommandInteraction) {
 
 	const channels = await interaction.guild?.channels.fetch();
 
+	// TODO: Make this error message more informative
+	// This error message should be more informative to the user. It is possible that the guild once had channels
+	// but now does not, essentially orphaning the related configurations.
+	// This can also happen when a channel is deleted and renamed to the same name since the association is made
+	// via the channel id.
 	if (!channels) {
 		await generalErrorMessage(interaction);
 		return;
 	}
 
+	// BUG: No error checking for an empty array here. What if there are no valid channels?
+	// Valid channels are considered channels that exist in the guild and have a nickname configuration for the user
 	const validChannels = channels
 		.filter((x) => {
 			return data.some((c) => {
