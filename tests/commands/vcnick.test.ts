@@ -255,6 +255,50 @@ describe('reset', () => {
 		);
 	});
 
+	it('should handle case when there are valid channels', async () => {
+		if (!interaction.guild) return;
+
+		interaction.guild.channels.fetch = vi.fn().mockReturnValue([
+			{ id: 'channel1', name: 'Channel 1' },
+			{ id: 'channel2', name: 'Channel 2' }
+		]);
+		interaction.options.getBoolean = vi.fn().mockReturnValue(false);
+
+		supabase.from = vi.fn().mockReturnValue({
+			select: vi.fn().mockReturnValue({
+				eq: vi.fn().mockReturnValue({
+					eq: vi.fn().mockReturnValue({
+						error: null,
+						data: [{ voice_channel_id: 'channel1' }, { voice_channel_id: 'channel2' }]
+					})
+				})
+			})
+		});
+
+		const stringSelectMenuBuilderSpy = vi
+			.spyOn(StringSelectMenuBuilder.prototype, 'setCustomId')
+			.mockReturnThis();
+
+		const actionRowBuilderSpy = vi
+			.spyOn(ActionRowBuilder.prototype, 'setComponents')
+			.mockReturnThis();
+
+		await reset(interaction);
+
+		expect(interaction.guild.channels.fetch).toHaveBeenCalled();
+		expect(stringSelectMenuBuilderSpy).toHaveBeenCalledWith('channel');
+		expect(interaction.editReply).toHaveBeenCalledWith({
+			content: 'Select which channels you would like to take out of the oven.',
+			components: [
+				new ActionRowBuilder<StringSelectMenuBuilder>().setComponents([
+					new StringSelectMenuBuilder()
+				])
+			]
+		});
+		expect(actionRowBuilderSpy).toHaveBeenCalled();
 	});
 
+	// TODO: Test vcnick.ts rows 174-224. Response message collector.
+	// This functionality would probably be easier to test if we move it out into a different function.
+	it('should handle case when all valid channels are selected', async () => {});
 });
