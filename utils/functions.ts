@@ -65,6 +65,7 @@ for (const emoji in emojiData) {
 	emojiData[emoji]['keywords'] = emojiLib[emoji] ? emojiLib[emoji] : [];
 }
 
+// FIXME: Should be case insensitive
 export const getUnicodeByEmojiName = (emojiName: string) => {
 	for (const emoji in emojiData) {
 		if (emojiData[emoji].keywords.find((keyword) => keyword == emojiName) == emojiName)
