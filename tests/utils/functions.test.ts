@@ -1,6 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { timeoutDelete, generalErrorMessage, getUnicodeByEmojiName } from '../../utils/functions';
+import {
+	timeoutDelete,
+	generalErrorMessage,
+	getUnicodeByEmojiName,
+	color
+} from '../../utils/functions';
 import { ChatInputCommandInteraction } from 'discord.js';
+import chalk from 'chalk';
 
 beforeEach(() => {
 	vi.useFakeTimers();
@@ -65,5 +71,14 @@ describe('getUnicodeByEmojiName', () => {
 	it('should be case insensitive when searching for an emoji name', () => {
 		const unicode = getUnicodeByEmojiName('SMILE');
 		expect(unicode).toBe('😀');
+	});
+});
+
+describe('color', () => {
+	it('should return a colored message', () => {
+		const result = color('text', 'Hello, World!');
+		const expected = chalk.hex('#ff8e4d')('Hello, World!');
+
+		expect(result).toEqual(expected);
 	});
 });
