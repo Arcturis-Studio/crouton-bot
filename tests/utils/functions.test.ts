@@ -3,9 +3,10 @@ import {
 	timeoutDelete,
 	generalErrorMessage,
 	getUnicodeByEmojiName,
-	color
+	color,
+	sendTimedMessage
 } from '../../utils/functions';
-import { ChatInputCommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, TextChannel } from 'discord.js';
 import chalk from 'chalk';
 
 beforeEach(() => {
@@ -80,5 +81,23 @@ describe('color', () => {
 		const expected = chalk.hex('#ff8e4d')('Hello, World!');
 
 		expect(result).toEqual(expected);
+	});
+});
+
+describe('sendTimedMessage', () => {
+	it('should send a message and delete it after the specified duration', async () => {
+		const message = 'Hello World!';
+		const channel = {
+			send: vi.fn().mockResolvedValue({ delete: vi.fn() })
+		} as unknown as TextChannel;
+		const duration = 5000;
+
+		await sendTimedMessage(message, channel, duration);
+
+		await vi.advanceTimersByTimeAsync(duration);
+
+		expect(channel.send).toHaveBeenCalledWith(message);
+		expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), duration);
+		expect((await channel.send(message)).delete).toHaveBeenCalled();
 	});
 });
