@@ -8,11 +8,14 @@ const event: BotEvent = {
 		// We can't change guild owners nicknames so no need to update
 		if (oldMember.id === oldMember.guild.ownerId) return;
 
+		// TODO: Check if the name changed before making a DB query
+
 		const { data, error } = await supabase
 			.from('nicknames')
 			.select()
 			.eq('user_id', oldMember.id)
 			.eq('guild_id', oldMember.guild.id);
+
 		// Ignore a no row response error
 		if (error && error.code !== 'PGRST116') {
 			console.error(error);
