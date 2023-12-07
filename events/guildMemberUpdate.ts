@@ -6,9 +6,8 @@ const event: BotEvent = {
 	name: 'guildMemberUpdate',
 	execute: async (oldMember: GuildMember, newMember: GuildMember) => {
 		// We can't change guild owners nicknames so no need to update
-		if (oldMember.id === oldMember.guild.ownerId) return;
-
-		// TODO: Check if the name changed before making a DB query
+		if (oldMember.id === oldMember.guild.ownerId || oldMember.displayName === newMember.displayName)
+			return;
 
 		const { data, error } = await supabase
 			.from('nicknames')

@@ -43,6 +43,27 @@ describe('guildMemberUpdate', () => {
 		expect(supabase.from('nicknames').select).not.toHaveBeenCalled();
 	});
 
+	it('should not update nickname if displayName is unchanged', async () => {
+		const oldMember = {
+			id: 'memberId',
+			guild: {
+				ownerId: 'guildOwnerId'
+			},
+			displayName: 'oldMemberName'
+		};
+		const newMember = {
+			id: 'memberId',
+			guild: {
+				id: 'guildId'
+			},
+			displayName: 'oldMemberName'
+		};
+
+		await event.execute(oldMember, newMember);
+
+		expect(supabase.from('nicknames').select).not.toHaveBeenCalled();
+	});
+
 	it('should handle a select response error', async () => {
 		const oldMember = {
 			id: 'memberId',
