@@ -32,7 +32,7 @@ describe('guildMemberUpdate', () => {
 			}
 		};
 		const newMember = {
-			id: 'newMemberId',
+			id: 'guildOwnerId',
 			guild: {
 				id: 'guildId'
 			}
@@ -45,16 +45,18 @@ describe('guildMemberUpdate', () => {
 
 	it('should handle a select response error', async () => {
 		const oldMember = {
-			id: 'oldMemberId',
+			id: 'memberId',
 			guild: {
 				id: 'guildId'
-			}
+			},
+			displayName: 'oldMemberName'
 		};
 		const newMember = {
-			id: 'newMemberId',
+			id: 'memberId',
 			guild: {
 				id: 'guildId'
-			}
+			},
+			displayName: 'newMemberName'
 		};
 		const supabaseError = {
 			code: 'PG Error'
@@ -82,13 +84,13 @@ describe('guildMemberUpdate', () => {
 
 	it('should handle no row response error', async () => {
 		const oldMember = {
-			id: 'oldMemberId',
+			id: 'memberId',
 			guild: {
 				id: 'guildId'
 			}
 		};
 		const newMember = {
-			id: 'newMemberId',
+			id: 'memberId',
 			guild: {
 				id: 'guildId'
 			}
@@ -119,13 +121,13 @@ describe('guildMemberUpdate', () => {
 
 	it('should update nickname if currentChannel is undefined and oldNickname is not equal to newMember.displayName', async () => {
 		const oldMember = {
-			id: 'oldMemberId',
+			id: 'memberId',
 			guild: {
 				id: 'guildId'
 			}
 		};
 		const newMember = {
-			id: 'newMemberId',
+			id: 'memberId',
 			guild: {
 				id: 'guildId'
 			},
@@ -144,14 +146,14 @@ describe('guildMemberUpdate', () => {
 
 	it('should not update nickname if currentChannel is defined', async () => {
 		const oldMember = {
-			id: 'oldMemberId',
+			id: 'memberId',
 			guild: {
 				id: 'guildId'
 			},
 			displayName: 'Old Member'
 		};
 		const newMember = {
-			id: 'newMemberId',
+			id: 'memberId',
 			guild: {
 				id: 'guildId'
 			},
@@ -175,14 +177,14 @@ describe('guildMemberUpdate', () => {
 
 	it('should handle an update response error', async () => {
 		const oldMember = {
-			id: 'oldMemberId',
+			id: 'memberId',
 			guild: {
 				id: 'guildId'
 			},
 			displayName: 'Old Member'
 		};
 		const newMember = {
-			id: 'newMemberId',
+			id: 'memberId',
 			guild: {
 				id: 'guildId'
 			},
