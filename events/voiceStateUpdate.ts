@@ -20,6 +20,7 @@ const event: BotEvent = {
 			return;
 		}
 
+		// TODO: This query is called in multiple files. It should be moved into the supabase folder/file
 		const { data, error } = await supabase
 			.from('nicknames')
 			.select()
@@ -36,6 +37,7 @@ const event: BotEvent = {
 		const currentChannel = data.find((x) => x.voice_channel_id === newMember.channelId);
 		const oldChannel = data.find((x) => x.voice_channel_id === oldMember.channelId);
 
+		// TODO: Should check if the bot has permissions before querying the DB
 		if (
 			!(await newMember.guild.members.fetchMe()).permissions.has(
 				PermissionsBitField.Flags.ManageNicknames
