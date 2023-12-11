@@ -54,11 +54,11 @@ export async function generalErrorMessage(interaction: ChatInputCommandInteracti
 	await timeoutDelete(interaction);
 }
 
-export const sendTimedMessage = (message: string, channel: TextChannel, duration: number) => {
-	channel
-		.send(message)
-		.then((m) => setTimeout(async () => (await channel.messages.fetch(m)).delete(), duration));
-	return;
+export const sendTimedMessage = async (message: string, channel: TextChannel, duration: number) => {
+	const sentMessage = await channel.send(message);
+	setTimeout(async () => {
+		await sentMessage.delete();
+	}, duration);
 };
 
 for (const emoji in emojiData) {
@@ -67,7 +67,11 @@ for (const emoji in emojiData) {
 
 export const getUnicodeByEmojiName = (emojiName: string) => {
 	for (const emoji in emojiData) {
-		if (emojiData[emoji].keywords.find((keyword) => keyword == emojiName) == emojiName)
+		if (
+			emojiData[emoji].keywords.find(
+				(keyword) => keyword.toLowerCase() == emojiName.toLowerCase()
+			) == emojiName.toLowerCase()
+		)
 			return emoji;
 	}
 };

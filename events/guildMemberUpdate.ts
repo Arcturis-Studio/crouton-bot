@@ -6,13 +6,15 @@ const event: BotEvent = {
 	name: 'guildMemberUpdate',
 	execute: async (oldMember: GuildMember, newMember: GuildMember) => {
 		// We can't change guild owners nicknames so no need to update
-		if (oldMember.id === oldMember.guild.ownerId) return;
+		if (oldMember.id === oldMember.guild.ownerId || oldMember.displayName === newMember.displayName)
+			return;
 
 		const { data, error } = await supabase
 			.from('nicknames')
 			.select()
 			.eq('user_id', oldMember.id)
 			.eq('guild_id', oldMember.guild.id);
+
 		// Ignore a no row response error
 		if (error && error.code !== 'PGRST116') {
 			console.error(error);

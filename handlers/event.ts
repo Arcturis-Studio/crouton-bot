@@ -4,15 +4,19 @@ import { join } from 'path';
 import { color } from '../utils/functions';
 import { BotEvent } from '../types';
 
-module.exports = (client: Client) => {
-	let eventsDir = join(__dirname, '../events');
+module.exports = async (client: Client) => {
+	const eventsDir = join(__dirname, '../events');
+	const eventFiles = readdirSync(eventsDir);
 
-	readdirSync(eventsDir).forEach((file) => {
-		if (!file.endsWith('.js')) return;
-		let event: BotEvent = require(`${eventsDir}/${file}`).default;
-		event.once
-			? client.once(event.name, (...args) => event.execute(...args))
-			: client.on(event.name, (...args) => event.execute(...args));
-		console.log(color('text', `🌠 Successfully loaded event ${color('variable', event.name)}`));
-	});
+	for (const file of eventFiles) {
+		const filePath = join(eventsDir, file);
+		const event: BotEvent = (await import(filePath)).default;
+
+		if (event.once) {
+			client.once(event.name, (...args) => event.execute(...args));
+		} else {
+			client.on(event.name, (...args) => event.execute(...args));
+		}
+		console.log(color('text', `Successfully loaded event ${color('variable', event.name)}`));
+	}
 };

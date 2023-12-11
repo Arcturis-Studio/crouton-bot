@@ -7,6 +7,7 @@
 	"scripts": {
 		"start": "tsc --build && node .",
 		"build": "tsc --build",
+		"test": "vitest --ui",
 		"dev": "tsc --build && NODE_ENV=local node ."
 	},
 	"keywords": [],
@@ -22,10 +23,14 @@
 	},
 	"devDependencies": {
 		"@types/node": "^18.11.18",
+		"@vitest/coverage-v8": "^0.34.6",
+		"@vitest/ui": "^0.34.6",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
 		"prettier": "^2.8.0",
 		"ts-node": "^10.9.1",
-		"typescript": "^4.9.4"
+		"typescript": "^4.9.4",
+		"vite": "^4.5.0",
+		"vitest": "^0.34.6"
 	}
 }
