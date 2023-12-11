@@ -8,3 +8,4 @@ config.json
 *.code_workspace
 supabase/.branches
 supabase/.temp
+coverage

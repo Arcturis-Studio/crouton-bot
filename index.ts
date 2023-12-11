@@ -35,8 +35,9 @@ client.slashCommands = new Collection<string, SlashCommand>();
 client.cooldowns = new Collection<string, number>();
 
 const handlersDir = join(__dirname, './handlers');
-readdirSync(handlersDir).forEach((handler) => {
-	require(`${handlersDir}/${handler}`)(client);
+readdirSync(handlersDir).forEach(async (handlerFile) => {
+	const handler = await import(`${handlersDir}/${handlerFile}`);
+	await handler.default(client);
 });
 
 client.login(process.env.BOT_TOKEN);

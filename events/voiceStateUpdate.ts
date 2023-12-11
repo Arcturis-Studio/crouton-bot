@@ -20,6 +20,20 @@ const event: BotEvent = {
 			return;
 		}
 
+		if (
+			!(await newMember.guild.members.fetchMe()).permissions.has(
+				PermissionsBitField.Flags.ManageNicknames
+			)
+		) {
+			await (
+				await member.guild.fetchOwner()
+			).send(
+				`I do not have permissions to manage nicknames in ${member.guild.name}! Please try inviting me again to refresh permissions.`
+			);
+			return;
+		}
+
+		// TODO: This query is called in multiple files. It should be moved into the supabase folder/file
 		const { data, error } = await supabase
 			.from('nicknames')
 			.select()
@@ -35,19 +49,6 @@ const event: BotEvent = {
 
 		const currentChannel = data.find((x) => x.voice_channel_id === newMember.channelId);
 		const oldChannel = data.find((x) => x.voice_channel_id === oldMember.channelId);
-
-		if (
-			!(await newMember.guild.members.fetchMe()).permissions.has(
-				PermissionsBitField.Flags.ManageNicknames
-			)
-		) {
-			await (
-				await member.guild.fetchOwner()
-			).send(
-				`I do not have permissions to manage nicknames in ${member.guild.name}! Please try inviting me again to refresh permissions.`
-			);
-			return;
-		}
 
 		if (currentChannel) {
 			await member.setNickname(currentChannel.new_nickname);

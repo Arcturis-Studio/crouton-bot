@@ -7,13 +7,9 @@
 	"scripts": {
 		"start": "tsc --build && node .",
 		"build": "tsc --build",
+		"test": "vitest --ui",
 		"dev": "tsc --build && NODE_ENV=local node .",
-		"register": "tsc --build && NODE_ENV=local node ./registerCommands.js",
-		"docker:builder": "docker buildx create --name builder --driver docker-container --bootstrap",
-		"docker:build": "docker build -t yourfavoritekyle/crouton_bot_standard ./bot",
-		"docker:dev": "docker compose --project-directory ./bot --env-file=.env.local up",
-		"docker:prod": "docker compose --project-directory ./bot --env-file=.env down --rmi all --volumes && docker compose --project-directory ./bot --env-file=.env up -d",
-		"docker:down": "docker compose --project-directory ./bot --env-file=.env down --volumes"
+		"register": "tsc --build && NODE_ENV=local node ./registerCommands.js"
 	},
 	"keywords": [],
 	"author": "",
@@ -28,10 +24,14 @@
 	},
 	"devDependencies": {
 		"@types/node": "^18.11.18",
+		"@vitest/coverage-v8": "^0.34.6",
+		"@vitest/ui": "^0.34.6",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
 		"prettier": "^2.8.0",
 		"ts-node": "^10.9.1",
-		"typescript": "^4.9.4"
+		"typescript": "^4.9.4",
+		"vite": "^4.5.0",
+		"vitest": "^0.34.6"
 	}
 }
