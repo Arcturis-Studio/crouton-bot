@@ -1,14 +1,7 @@
-import {
-	SlashCommandBuilder,
-	EmbedBuilder,
-	ButtonBuilder,
-	ButtonStyle,
-	ActionRowBuilder,
-	ComponentType
-} from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../types';
-import { generalErrorMessage, timeoutDelete } from '../utils/functions';
-import { diceParser } from '../utils/diceParser';
+import { generalErrorMessage } from '../utils/functions';
+import { Roll } from '../structs/Roll';
 
 const command: SlashCommand = {
 	command: new SlashCommandBuilder()
@@ -27,45 +20,31 @@ const command: SlashCommand = {
 
 		const dice = interaction.options.getString('dice');
 
+		const rerollButton = new ActionRowBuilder<ButtonBuilder>().addComponents(
+			new ButtonBuilder().setCustomId('reroll').setLabel('Reroll').setStyle(ButtonStyle.Primary)
+		);
+
 		if (!dice) {
 			await generalErrorMessage(interaction);
 			return;
 		}
 
-		const results = diceParser(dice);
+		// NOTE: Have to try/catch this as a setter is used to pattern match the diceList
+		// Is there a better way to document this? A better way to do this?
+		try {
+			const roll = new Roll(dice);
 
-		const rollEmbed = new EmbedBuilder()
-			.setColor(0x0099ff)
-			.setTitle("Here's your roll results!")
-			.setTimestamp();
-
-		const rerollButton = new ButtonBuilder()
-			.setCustomId('reroll')
-			.setLabel('Reroll')
-			.setStyle(ButtonStyle.Primary);
-
-		const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(rerollButton);
-
-		rollEmbed.setAuthor({ name: interaction.user.username });
-
-		results.forEach((roll) => {
-			rollEmbed.addFields({
-				name: `${roll.num}d${roll.sides}`,
-				value: `${roll.roll}`,
-				inline: true
+			// TODO: Send rerollButton
+			await interaction.editReply({
+				content: roll.generateMessage()
+				// components: [rerollButton]
 			});
-		});
-
-		rollEmbed.addFields({
-			name: 'Total',
-			value: results
-				.map((roll) => roll.roll)
-				.reduce((a, b) => a + b)
-				.toString(),
-			inline: false
-		});
-
-		await interaction.editReply({ embeds: [rollEmbed], components: [actionRow] });
+		} catch (error) {
+			// TODO: Implement a better error handler. Need to be able to optionally customize the error message,
+			// especially since this wil be seen by the user. It should point out how to resolve the issue.
+			await generalErrorMessage(interaction);
+			return;
+		}
 	},
 	cooldown: 10
 };
