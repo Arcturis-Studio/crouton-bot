@@ -1,5 +1,3 @@
-import { RateLimitData } from 'discord.js';
-
 type Result = {
 	command: string;
 	rolls: Die[];
@@ -27,6 +25,7 @@ export class Roll {
 	public result: Result[] = [];
 	private _total: number = 0;
 	// TODO: Theoretical total/max
+	// HBTG Example Message https://discord.com/channels/1032020955930841128/1032020956622893108/1185808472638488597
 
 	constructor(diceList: string, roll: number = 1) {
 		this.diceList = diceList;
@@ -66,7 +65,7 @@ export class Roll {
 			return `- ${roll.command}: ${dieRolls.join(' + ')} = ${roll.total}`;
 		});
 
-		const formattedMessage = `${title}\n${roll}\n${rolls.join('\n')}\n${total}`;
+		const formattedMessage = `${title}\n> ${this.diceList}\n${roll}\n${rolls.join('\n')}\n${total}`;
 
 		if (formattedMessage.length > 2000) {
 			throw new Error(
