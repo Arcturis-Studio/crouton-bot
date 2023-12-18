@@ -26,9 +26,10 @@ export class Roll {
 	private _total: number = 0;
 	// TODO: Theoretical total/max
 	// HBTG Example Message https://discord.com/channels/1032020955930841128/1032020956622893108/1185808472638488597
+	private rollListLeader: string = '> ';
 
 	constructor(diceList: string, roll: number = 1) {
-		this.diceList = diceList;
+		this.diceList = this.removeLeader(diceList);
 		this.roll = roll;
 
 		this.parseDiceList();
@@ -48,9 +49,26 @@ export class Roll {
 		});
 	}
 
+	private removeLeader(message: string) {
+		// There should only be one block quote, so the first filter result should be okay
+		const messageComponents = message.split('\n');
+		const previousRoll = messageComponents.filter((component) =>
+			component.startsWith(this.rollListLeader)
+		);
+
+		// If previousRoll is empty, then this is a new and fresh roll
+		if (!previousRoll[0]) {
+			return message;
+		}
+
+		// If previousRoll is not empty, then replace the leader and continue as if a new roll.
+		return previousRoll[0].replace(this.rollListLeader, '');
+	}
+
 	public generateMessage() {
 		const title = `# Here are your roll results!`;
 		const roll = `## Roll #${this.roll}`;
+		const rollList = `${this.rollListLeader}${this.diceList}`;
 		const total = `## Total: ${this.total}`;
 
 		const rolls = this.result.map((roll) => {
@@ -65,8 +83,10 @@ export class Roll {
 			return `- ${roll.command}: ${dieRolls.join(' + ')} = ${roll.total}`;
 		});
 
-		const formattedMessage = `${title}\n> ${this.diceList}\n${roll}\n${rolls.join('\n')}\n${total}`;
+		const formattedMessage = [title, roll, rollList, rolls.join('\n'), total].join('\n');
 
+		// NOTE: This is kind of a magic number, this limit is set by Discord. Should this be a prop of the class?
+		// Maybe I should add these limits to a const file?
 		if (formattedMessage.length > 2000) {
 			throw new Error(
 				"The formatted message length is too large. Discord's message limit is 2000 characters."
@@ -84,6 +104,7 @@ export class Roll {
 		return this._total;
 	}
 
+	// Checks the validity of a given diceList with a regex pattern
 	public set diceList(diceList: string) {
 		const lowercaseDice = diceList.toLowerCase();
 		// NOTE: This could get very hairy very quick if we advance past just *d* pattern
