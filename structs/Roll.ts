@@ -28,9 +28,16 @@ export class Roll {
 	// HBTG Example Message https://discord.com/channels/1032020955930841128/1032020956622893108/1185808472638488597
 	private rollListLeader: string = '> ';
 
-	constructor(diceList: string, roll: number = 1) {
-		this.diceList = this.removeLeader(diceList);
-		this.roll = roll;
+	constructor(diceList: string = '', previousRollMessage: string = '') {
+		if (diceList === '' && previousRollMessage === '')
+			throw new Error('Invalid dice list or previous roll message was provided');
+
+		if (previousRollMessage !== '')
+			this.diceList = this.getRollCommandFromMessage(previousRollMessage);
+
+		if (diceList !== '') this.diceList = diceList;
+
+		this.roll = this.getRollCountFromMessage(previousRollMessage) + 1;
 
 		this.parseDiceList();
 	}
@@ -49,7 +56,34 @@ export class Roll {
 		});
 	}
 
-	private removeLeader(message: string) {
+	/**
+	 * Retrieves the roll count from a given message.
+	 * If the message does not contain a roll count, a roll count of 0 is returned
+	 *
+	 * @param {string} message - The message to extract the roll count from.
+	 * @return {number} - The extracted roll count from the message.
+	 */
+	private getRollCountFromMessage(message: string) {
+		const messageComponents = message.split('\n');
+		const previousRollCount = messageComponents.filter((component) =>
+			component.startsWith('## Roll #')
+		);
+
+		if (!previousRollCount[0]) {
+			return 0;
+		}
+
+		return parseInt(previousRollCount[0].replace('## Roll #', ''));
+	}
+
+	/**
+	 * Retrieves the roll command from a given message.
+	 * If the message is not a roll command, the original message is returned with the rollListLeader removed.
+	 *
+	 * @param {string} message - The message to extract the roll command from.
+	 * @return {string} - The extracted roll command from the message.
+	 */
+	private getRollCommandFromMessage(message: string) {
 		// There should only be one block quote, so the first filter result should be okay
 		const messageComponents = message.split('\n');
 		const previousRoll = messageComponents.filter((component) =>

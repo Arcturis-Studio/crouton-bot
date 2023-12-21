@@ -1,5 +1,6 @@
 import { Interaction } from 'discord.js';
 import { BotEvent } from '../types';
+import { Roll } from '../structs/Roll';
 
 const event: BotEvent = {
 	name: 'interactionCreate',
@@ -51,6 +52,12 @@ const event: BotEvent = {
 		} else if (interaction.isButton()) {
 			// TODO: Implement reroll command
 			if (interaction.customId === 'reroll') {
+				const reroll = new Roll('', interaction.message.content);
+				interaction.message.edit({ content: interaction.message.content, components: [] });
+				interaction.reply({
+					content: reroll.generateMessage(),
+					components: interaction.message.components
+				});
 			}
 		}
 	}

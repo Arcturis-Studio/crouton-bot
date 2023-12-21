@@ -6,7 +6,7 @@ describe('Roll', () => {
 		describe('should throw an error if the dice list is invalid', () => {
 			const error = 'Invalid dice list';
 			it.each([
-				{ diceList: '', expected: error },
+				{ diceList: '', expected: 'Invalid dice list or previous roll message was provided' },
 				{ diceList: 'abc', expected: error },
 				{ diceList: '123', expected: error },
 				{ diceList: '1d20a', expected: error },
@@ -100,6 +100,33 @@ describe('Roll', () => {
 			expect(() => roll.generateMessage()).toThrowError(
 				"The formatted message length is too large. Discord's message limit is 2000 characters."
 			);
+		});
+	});
+
+	describe('previousRollMessage', () => {
+		it('should throw an error when both diceList and previousRollMessage not not provided', () => {
+			expect(() => new Roll()).toThrowError(
+				'Invalid dice list or previous roll message was provided'
+			);
+		});
+
+		it('should should set roll number when previousRollMessage is provided', () => {
+			const oldRoll = new Roll('1d20 2d4');
+			const oldMessage = oldRoll.generateMessage();
+
+			const newRoll = new Roll('', oldMessage);
+
+			expect(newRoll.roll).toEqual(2);
+		});
+
+		it('should should roll the same roll command', () => {
+			const rollCommand = '1d20 2d4';
+			const oldRoll = new Roll(rollCommand);
+			const oldMessage = oldRoll.generateMessage();
+
+			const newRoll = new Roll('', oldMessage);
+
+			expect(newRoll.diceList).toEqual(rollCommand);
 		});
 	});
 });

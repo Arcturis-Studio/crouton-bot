@@ -36,8 +36,8 @@ const command: SlashCommand = {
 
 			// TODO: Send rerollButton
 			await interaction.editReply({
-				content: roll.generateMessage()
-				// components: [rerollButton]
+				content: roll.generateMessage(),
+				components: [rerollButton]
 			});
 		} catch (error) {
 			// TODO: Implement a better error handler. Need to be able to optionally customize the error message,
