@@ -8,7 +8,8 @@
 		"start": "tsc --build && node .",
 		"build": "tsc --build",
 		"test": "vitest --ui",
-		"dev": "tsc --build && NODE_ENV=local node ."
+		"dev": "tsc --build && NODE_ENV=local node .",
+		"register": "tsc --build && NODE_ENV=local node ./registerCommands.js"
 	},
 	"keywords": [],
 	"author": "",

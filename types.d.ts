@@ -74,6 +74,7 @@ declare global {
 			PUBLIC_SUPABASE_URL: string;
 			PUBLIC_SUPABASE_ANON_KEY: string;
 			SUPABASE_SERVICE_ROLE_KEY: string;
+			DEV_GUILD_ID: string;
 		}
 	}
 }
